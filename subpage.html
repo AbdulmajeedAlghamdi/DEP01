@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<header>
+    <head>
+    <title>Answer questions</title>
+    <link rel="stylesheet" href="aa.CSS">
+    </head>
+</header>
+<body>
+    <form action="ThankYouPage.html" method="get" autocomplete="on">
+    <section>
+        <label for="name">What is your name? </label>
+        <input  name="name" id="name" type="text" autocomplete="given-name" placeholder="Firstname Lastname" required/>
+        <p></p>
+    </section>
+        <section>
+            <label for="Major">What is your Major? </label>
+            <section>
+                <table>
+                    <tr>
+                        <td><input type="radio" name="Major" id="SWE" value="SWE" />
+                        <label for="SWE">SWE</label</td>               
+                        <td><input type="radio" name="Major" id="CS" value="CS" />
+                        <label for="CS">CS</label></td>
+                    </tr>  
+                </table>
+            </section>
+        </section>
+        <section>
+            <label for="skills">What skills do you have from the following skills?</label>
+            <section>
+                <table>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="skills" id="Time management" value="Time management" />
+                            <label for="Time management">Time management</label><p></p>
+                        </td>
+                        <td>    
+                            <input type="checkbox" name="skills" id="Leadership" value="Leadership" />
+                            <label for="Leadership">Leadership</label><p></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="skills" id="Project management" value="Project management" />
+                            <label for="Project management">Project management</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="skills" id="Problem-Solving" value="Problem-Solving" />
+                            <label for="Problem-Solving">Problem-Solving</label></td></tr>
+                </table>
+        
+            </section>
+        </section>
+        <p></p>
+        <section>
+            <label for="Building">What is your favorite building</label>
+            <section>
+                <input list="Buildings" id="Building" name="Building"/>
+                <datalist id="Buildings">
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="76">76</option>
+                </datalist><p></p>
+            </section>
+        </section>
+    <section>            
+        <label for="level">How do you rate your skills level in the following skills?<p></p></label>
+    </section>
+    <section>
+        <table>
+            <tr>
+                <td>
+                    <label for="html">html</label><p></p>
+                    <input type="range" name="level" id="html">
+                </td>
+                <td>
+                    <label for="CSS">CSS</label><p></p>
+                    <input type="range" name="level" id="CSS">
+                </td>
+                <td>
+                    <label for="JS">JS</label><p></p>
+                    <input type="range" name="level" id="JS">
+                </td>
+            </tr>
+        </table>
+    </section>
+    <p></p>
+    
+    
+    <!-- <div class="toolbar">
+        <p>Write your signature here</p>
+        <input type="color" aria-label="select pen color" value="#ffffff">
+        <input type="range" min="2" max="50" value="30" aria-label="select pen size"><span class="output">30</span>
+        <button>Clear canvas</button>
+    </div>
+
+    <canvas class="myCanvas">
+        
+    </canvas> -->
+    
+    <section>
+        <p>Write your signature here</p>
+    </section>        
+    <canvas id="signatureCanvas" width="300" height="150" style="border: 1px solid #000;" ></canvas>
+
+    <nav>
+        <button type="button" onclick="clearSignature()">Clear Signature</button>
+        <input type="submit" value="submit"/>        
+        
+
+    </nav> 
+</form>
+
+<script>
+    const canvas = document.getElementById('signatureCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDrawing);
+    canvas.addEventListener('mouseout', endDrawing);
+    function startDrawing(e) {
+        isDrawing = true;
+        draw(e);
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    }
+
+    function endDrawing() {
+        isDrawing = false;
+        ctx.beginPath();
+    }
+
+    function clearSignature() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.getElementById('signatureImage').value = '';
+    }
+</script>
+    <!-- <script>
+        const canvas = document.querySelector('.myCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width = 600;
+        const height = canvas.height = 200;
+        ctx.fillStyle = 'rgb(0,0,0)';
+        ctx.fillRect(0, 0, 600, 200);
+
+        const colorPicker = document.querySelector('input[type="color"]');
+        const sizePicker = document.querySelector('input[type="range"]');
+        const output = document.querySelector('.output');
+        const clearBtn = document.querySelector('button');
+
+        // covert degrees to radians
+        function degToRad(degrees) {
+            return degrees * Math.PI / 180;
+        };
+
+        // update sizepicker output value
+        sizePicker.addEventListener('input', () => output.textContent = sizePicker.value);
+
+        // store mouse pointer coordinates, and whether the button is pressed
+        let curX;
+        let curY;
+        let pressed = false;
+
+        // update mouse pointer coordinates
+        document.addEventListener('mousemove', e => {
+            curX = e.clientX
+            curY = e.clientY 
+        });
+
+        canvas.addEventListener('mousedown', () => pressed = true);
+        canvas.addEventListener('mouseup', () => pressed = false);
+        clearBtn.addEventListener('click', () => {
+            ctx.fillStyle = 'rgb(0,0,0)';
+            ctx.fillRect(0, 0, width, height);
+        });
+
+        let size = 10
+
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        }
+
+        function endDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+
+    </script> -->
+    
+
+    
+
+    
+</form>
+</body>
+</html>
